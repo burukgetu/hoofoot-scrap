@@ -1,17 +1,16 @@
 const express = require('express');
 const axios= require('axios');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright')
 const app = express();
 
 app.get('/',async (req, res) => {
     const url = "https://hoofoot.com/";
 
     try {
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await chromium.launch();
         const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'domcontentloaded' });
+        await page.goto(url);
         const html = await page.content();
-        await browser.close();
         res.send(html);
     } catch (error) {
         console.error('Error fetching page with Puppeteer:', error);
